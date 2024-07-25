@@ -2,13 +2,15 @@ import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { KeyboardControls, PointerLockControls } from "@react-three/drei";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import CharacterModel from "./components/CharacterModel";
 import SceneModel from "./components/Scene";
 import { CHARACTER_MODEL_URL } from "./Constants.ts";
+import Pete from "./components/Pete.tsx";
 
 function App() {
+  const [firstPersonEnable,setFirstPersonEnable] = useState(false)
   /**
    * Character animation set preset
    */
@@ -44,7 +46,13 @@ function App() {
 
   return (
     <>
-      <Canvas shadows>
+      <Canvas
+      shadows
+       onPointerDown={(e) => {
+        (e.target as HTMLCanvasElement).requestPointerLock();
+      }}
+>
+  <Pete></Pete>
         <directionalLight
           intensity={2.5}
           color={"#FFFFFF"}
@@ -66,19 +74,19 @@ function App() {
                 map={keyboardMap}
               >
            <Ecctrl
-                disableFollowCam ={false}
-                camInitDis={-0.01} // 相机初始位置
-                camMinDis={-0.01} // 相机最小缩放距离（最近的位置）
-                camFollowMult={100} // 这里给一个大数字，使相机跟随角色的动作即时
-                turnVelMultiplier={1} // 转向速度与移动速度相同
-                turnSpeed={100} // 给一个大的转向速度以避免转向延迟
+                // camInitDis={-0.01} // 相机初始位置
+                // camMinDis={-0.01} // 相机最小缩放距离（最近的位置）
+                // camFollowMult={100} // 这里给一个大数字，使相机跟随角色的动作即时
+                // turnVelMultiplier={1} // 转向速度与移动速度相同
+                // turnSpeed={100} // 给一个大的转向速度以避免转向延迟
+                animated={ true }   // 启用动画
                 mode="CameraBasedMovement" // 以第一人称视角
               >
                 <EcctrlAnimation
                   characterURL={CHARACTER_MODEL_URL}
                   animationSet={animationSet}
                 >
-                  <CharacterModel visible={false}/>
+                  <CharacterModel visible={firstPersonEnable?false:true}/>
                 </EcctrlAnimation>
               </Ecctrl>
             </KeyboardControls>
