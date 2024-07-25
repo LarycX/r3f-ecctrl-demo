@@ -1,7 +1,7 @@
 import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Physics, RigidBody } from "@react-three/rapier";
-import { KeyboardControls } from "@react-three/drei";
+import { KeyboardControls, PointerLockControls } from "@react-three/drei";
 import { Suspense } from "react";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import CharacterModel from "./components/CharacterModel";
@@ -62,13 +62,23 @@ function App() {
 
         <Suspense fallback={null}>
           <Physics timeStep="vary">
-            <KeyboardControls map={keyboardMap}>
-              <Ecctrl debug animated position={[0, 5, 0]}>
+            <KeyboardControls 
+                map={keyboardMap}
+              >
+           <Ecctrl
+                disableFollowCam ={false}
+                camInitDis={-0.01} // 相机初始位置
+                camMinDis={-0.01} // 相机最小缩放距离（最近的位置）
+                camFollowMult={100} // 这里给一个大数字，使相机跟随角色的动作即时
+                turnVelMultiplier={1} // 转向速度与移动速度相同
+                turnSpeed={100} // 给一个大的转向速度以避免转向延迟
+                mode="CameraBasedMovement" // 以第一人称视角
+              >
                 <EcctrlAnimation
                   characterURL={CHARACTER_MODEL_URL}
                   animationSet={animationSet}
                 >
-                  <CharacterModel />
+                  <CharacterModel visible={false}/>
                 </EcctrlAnimation>
               </Ecctrl>
             </KeyboardControls>
