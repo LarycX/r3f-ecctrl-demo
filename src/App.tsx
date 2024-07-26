@@ -1,7 +1,7 @@
 import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { Physics, RigidBody } from "@react-three/rapier";
-import { KeyboardControls, PointerLockControls } from "@react-three/drei";
+import { KeyboardControls } from "@react-three/drei";
 import { Suspense, useState } from "react";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import CharacterModel from "./components/CharacterModel";
@@ -10,7 +10,6 @@ import { CHARACTER_MODEL_URL } from "./Constants.ts";
 import Pete from "./components/Pete.tsx";
 
 function App() {
-  const [firstPersonEnable,setFirstPersonEnable] = useState(false)
   /**
    * Character animation set preset
    */
@@ -52,7 +51,6 @@ function App() {
         (e.target as HTMLCanvasElement).requestPointerLock();
       }}
 >
-  <Pete></Pete>
         <directionalLight
           intensity={2.5}
           color={"#FFFFFF"}
@@ -86,7 +84,9 @@ function App() {
                   characterURL={CHARACTER_MODEL_URL}
                   animationSet={animationSet}
                 >
-                  <CharacterModel visible={firstPersonEnable?false:true}/>
+                  {/* <CharacterModel visible={firstPersonEnable?false:true}/> */}
+  <Pete></Pete>
+
                 </EcctrlAnimation>
               </Ecctrl>
             </KeyboardControls>
